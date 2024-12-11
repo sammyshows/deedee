@@ -32,5 +32,9 @@ export default defineNuxtConfig({
     "@/assets/css/main.css",
   ],
 
+  imports: {
+    dirs: ['stores']
+  },
+
   compatibilityDate: '2024-12-10'
 });
