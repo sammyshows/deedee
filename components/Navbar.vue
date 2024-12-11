@@ -1,5 +1,9 @@
 <template>
   <div class="h-full w-16 flex flex-col justify-center items-center gap-3 bg-slate-900">
+    <NuxtLink to="/auth/signup" class="absolute top-4 p-2 rounded-full duration-100 flex items-center justify-center">
+      <UserIcon class="size-5 text-slate-400" />
+    </NuxtLink>
+
     <NuxtLink
       v-for="item in navItems"
       :key="item.name"
@@ -19,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { KeyIcon, PlusCircleIcon, UsersIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/24/outline';
+import { KeyIcon, UserIcon, UsersIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/24/outline';
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 

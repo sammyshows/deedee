@@ -16,7 +16,10 @@
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
     "@pinia/nuxt": "^0.4.8",
+    "argon2": "^0.41.1",
     "pinia": "^2.0.34",
-    "uuidv4": "^6.2.13"
+    "postgres": "^3.4.5",
+    "uuidv4": "^6.2.13",
+    "winston": "^3.17.0"
   }
 }

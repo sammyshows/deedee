@@ -3,10 +3,9 @@ export default defineNuxtConfig({
   ssr: false,
 
   runtimeConfig: {
+    DATABASE_URL: process.env.DATABASE_URL,
     public: {
-      AUTH_SERVICE_URL: process.env.AUTH_SERVICE_URL,
-      CODE_ANALYSIS_SERVICE_URL: process.env.CODE_ANALYSIS_SERVICE_URL,
-      DOCUMENTATION_SERVICE_URL: process.env.DOCUMENTATION_SERVICE_URL,
+    
     }
   },
 
