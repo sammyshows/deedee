@@ -103,15 +103,12 @@ const handleSubmit = async () => {
 
   try {
     // Send plaintext password to the server over HTTPS
-    const response = await fetch('/api/auth/create-user', {
+    const response = await $fetch('/api/auth/create-user', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+      body: {
         email: form.value.email,
         password: form.value.password,
-      }),
+      },
     });
 
     if (response.ok) {
