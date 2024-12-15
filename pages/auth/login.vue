@@ -1,9 +1,9 @@
 <template>
   <div class="w-full h-full flex justify-center items-center bg-slate-800">
     <div class="w-[28rem] bg-slate-700 py-6 px-8 rounded-lg shadow-lg">
-      <p class="text-xl font-medium tracking-wide text-center text-slate-300 mb-4">Sign Up</p>
+      <p class="text-xl font-medium tracking-wide text-center text-slate-300 mb-4">Login</p>
 
-      <form @submit.prevent="handleSubmit" class="space-y-4">
+      <form @submit.prevent="handleLogin" class="space-y-4">
         <!-- Email Field -->
         <div>
           <label for="email" class="block text-xs font-medium text-slate-300">Email</label>
@@ -30,21 +30,10 @@
           <p v-if="errors.password" class="text-red-500 text-xs mt-1">{{ errors.password }}</p>
         </div>
 
-        <!-- Confirm Password Field -->
-        <div>
-          <label for="confirmPassword" class="block text-xs font-medium text-slate-300">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            v-model="form.confirmPassword"
-            class="w-full h-10 mt-1 bg-slate-600 rounded-md px-4 text-xs placeholder:italic placeholder:text-slate-500"
-            placeholder="Confirm your password"
-          />
-          <p v-if="errors.confirmPassword" class="text-red-500 text-xs mt-1">{{ errors.confirmPassword }}</p>
-        </div>
-
         <div class="w-full flex justify-center">
-          <NuxtLink to="/auth/login" class="text-xs text-center underline underline-offset-2">Already have an account? Login</NuxtLink>
+          <NuxtLink to="/auth/signup" class="text-xs text-center underline underline-offset-2">
+            Don't have an account? Signup
+          </NuxtLink>
         </div>
 
         <!-- Submit Button -->
@@ -53,7 +42,7 @@
             type="submit"
             class="h-10 px-6 rounded-md bg-blue-500 text-xs font-medium text-white hover:bg-blue-600"
           >
-            Create Account
+            Log In
           </button>
         </div>
       </form>
@@ -65,21 +54,18 @@
 import { ref } from 'vue';
 
 const form = ref({
-  email: 'sam@gmail.com',
-  password: 'admin123',
-  confirmPassword: 'admin123',
+  email: '',
+  password: '',
 });
 
 const errors = ref({
   email: '',
   password: '',
-  confirmPassword: '',
 });
 
-const validate = () => {
+const validateLogin = () => {
   errors.value.email = '';
   errors.value.password = '';
-  errors.value.confirmPassword = '';
 
   if (!form.value.email) {
     errors.value.email = 'Email is required.';
@@ -89,25 +75,17 @@ const validate = () => {
 
   if (!form.value.password) {
     errors.value.password = 'Password is required.';
-  } else if (form.value.password.length < 8) {
-    errors.value.password = 'Password must be at least 8 characters long.';
   }
 
-  if (!form.value.confirmPassword) {
-    errors.value.confirmPassword = 'Please confirm your password.';
-  } else if (form.value.password !== form.value.confirmPassword) {
-    errors.value.confirmPassword = 'Passwords do not match.';
-  }
-
-  return !errors.value.email && !errors.value.password && !errors.value.confirmPassword;
+  return !errors.value.email && !errors.value.password;
 };
 
-const handleSubmit = async () => {
-  if (!validate()) return;
+const handleLogin = async () => {
+  if (!validateLogin()) return;
 
   try {
-    // Send plaintext password to the server over HTTPS
-    const response = await $fetch('/api/auth/create-user', {
+    // Send credentials to the server
+    const response = await $fetch('/api/auth/login', {
       method: 'POST',
       body: {
         email: form.value.email,
@@ -115,14 +93,15 @@ const handleSubmit = async () => {
       },
     });
 
-    if (response.ok) {
-      alert('Account created successfully!');
+    // Handle response
+    if (response.success) {
+      useRouter().push('/secrets');
+      // Redirect or perform further actions
     } else {
-      const errorData = await response.json();
-      alert(`Error: ${errorData.message}`);
+      errors.value.email = 'Invalid email or password.';
     }
   } catch (error) {
-    console.error('Error during signup:', error);
+    console.error('Error during login:', error);
     alert('An unexpected error occurred. Please try again.');
   }
 };
